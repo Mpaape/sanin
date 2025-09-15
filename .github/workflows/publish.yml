@@ -1,0 +1,38 @@
+name: Publish sanin to PyPI
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  pypi-publish:
+    name: Publish sanin release to PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/sanin
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Upgrade build tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install build twine
+
+      - name: Build sanin (sdist + wheel)
+        run: python -m build
+
+      - name: Twine check
+        run: python -m twine check dist/*
+
+      - name: Publish sanin to PyPI (Trusted Publisher)
+        uses: pypa/gh-action-pypi-publish@release/v1
