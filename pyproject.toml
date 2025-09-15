@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sanin"
-version = "0.1.0"
+version = "1.0.0"
 description = "Synthetic anomaly injection for time series with auto baseline estimation."
 authors = [{name = "Mateus Paape"}]
 readme = "README.md"
