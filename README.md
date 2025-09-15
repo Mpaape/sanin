@@ -1,4 +1,5 @@
 # sanin
+<img width="102" height="102" alt="image" src="https://github.com/user-attachments/assets/127a9f7e-0d4a-4583-a3a9-ba601e747c28" />
 
 A lightweight package for **injecting synthetic anomalies** into time series **without** requiring prior metadata.  
 It internally estimates level, trend, and seasonality, then applies user-selected anomalies.
