@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anomfactory"
+version = "0.1.0"
+description = "Synthetic anomaly injection for time series with auto baseline estimation."
+authors = [{name = "Mateus Paape"}]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["numpy>=1.22", "pandas>=1.5"]
+
+[tool.setuptools.packages.find]
+where = ["anomfactory"]
