@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 from sanin import AnomalyInjector, AnomalyType
 
-# ---------- 1) Série base ----------
+# ---------- 1) Base series ----------
 def make_base_series(n=1000, seed=123, period=50):
     rng = np.random.default_rng(seed)
     t = np.arange(n)
@@ -19,14 +19,14 @@ def make_base_series(n=1000, seed=123, period=50):
     idx = pd.date_range("2025-01-01", periods=n, freq="min")
     return pd.Series(values, index=idx, name="value")
 
-# ---------- 2) Aux: plot ----------
+# ---------- 2) Helper: plot ----------
 def plot_before_after(orig: pd.Series, inj: pd.Series, title: str, outdir: str):
     plt.figure(figsize=(12, 4))
     plt.plot(orig.index, orig.values, label="Original")
-    plt.plot(inj.index, inj.values, label="Com anomalia")
+    plt.plot(inj.index, inj.values, label="With anomaly")
     plt.title(title)
-    plt.xlabel("Tempo")
-    plt.ylabel("Valor")
+    plt.xlabel("Time")
+    plt.ylabel("Value")
     plt.grid(True)
     plt.legend()
     os.makedirs(outdir, exist_ok=True)
@@ -35,25 +35,25 @@ def plot_before_after(orig: pd.Series, inj: pd.Series, title: str, outdir: str):
     plt.savefig(os.path.join(outdir, f"{safe}.png"), dpi=120)
     plt.show()
 
-# ---------- 3) Casos de uso ----------
+# ---------- 3) Use cases ----------
 def run_all():
     s = make_base_series()
     inj = AnomalyInjector(random_state=42)
     outdir = "./figs"
 
     cases = [
-        # (tipo, kwargs, titulo)
-        (AnomalyType.SPIKE, dict(severity=1.5, n_points=5), "Spike (5 pontos)"),
-        (AnomalyType.DROP, dict(severity=1.5, n_points=5), "Drop (5 pontos)"),
-        (AnomalyType.LEVEL_SHIFT, dict(severity=2.0), "Level shift (degrau)"),
-        (AnomalyType.VARIANCE_CHANGE, dict(severity=2.0), "Mudança de variância (janela)"),
-        (AnomalyType.TREND_DRIFT, dict(severity=1.5), "Trend drift (mudança de inclinação)"),
-        (AnomalyType.SEASON_AMP_CHANGE, dict(severity=1.0), "Mudança de amplitude sazonal (janela)"),
-        (AnomalyType.FLATLINE, {}, "Flatline (sensor preso)"),
-        (AnomalyType.MISSING, {}, "Missing (NaNs em janela)"),
-        (AnomalyType.STUCK_HIGH, {}, "Stuck high (saturação alta)"),
-        (AnomalyType.STUCK_LOW, {}, "Stuck low (saturação baixa)"),
-        (AnomalyType.BLACKOUT, {}, "Blackout (zerar/valor fixo)"),
+        # (type, kwargs, title)
+        (AnomalyType.SPIKE, dict(severity=1.5, n_points=5), "Spike (5 points)"),
+        (AnomalyType.DROP, dict(severity=1.5, n_points=5), "Drop (5 points)"),
+        (AnomalyType.LEVEL_SHIFT, dict(severity=2.0), "Level shift"),
+        (AnomalyType.VARIANCE_CHANGE, dict(severity=2.0), "Variance change (window)"),
+        (AnomalyType.TREND_DRIFT, dict(severity=1.5), "Trend drift"),
+        (AnomalyType.SEASON_AMP_CHANGE, dict(severity=1.0), "Seasonal amplitude change"),
+        (AnomalyType.FLATLINE, {}, "Flatline (stuck sensor)"),
+        (AnomalyType.MISSING, {}, "Missing (NaNs in window)"),
+        (AnomalyType.STUCK_HIGH, {}, "Stuck high"),
+        (AnomalyType.STUCK_LOW, {}, "Stuck low"),
+        (AnomalyType.BLACKOUT, {}, "Blackout (zeros / fixed value)"),
     ]
 
     for kind, kwargs, title in cases:
